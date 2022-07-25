@@ -1,0 +1,3 @@
+rootProject.name = 'krpc'
+include 'krpc-core'
+include 'krpc-common'
