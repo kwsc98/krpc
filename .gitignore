@@ -162,3 +162,5 @@ version.properties
 .externalToolBuilders
 *svn/
 ~*
+/.gradle/
+/.idea/
