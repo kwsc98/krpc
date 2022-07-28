@@ -2,10 +2,8 @@ package pers.krpc.core;
 
 
 import lombok.Getter;
-import pers.krpc.core.role.Customer;
-import pers.krpc.core.role.Provider;
+import org.springframework.beans.factory.FactoryBean;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -15,21 +13,16 @@ import java.util.Map;
  * @author wangsicheng
  * @since
  **/
-public class InterfaceContext {
-
+public class InterfaceContext{
 
     @Getter
-    private String path;
+    private Class<?> path;
 
-    private Map<String,InterfaceContext> interfaceContextMap;
+    private Map<String, InterfaceContextDetails> interfaceContextMap;
 
-    public static class InterfaceContextDetails{
-
-        private String version;
-
-        private List<Provider> providerList;
-
-        private List<Customer> customerList;
-
+    public Object getObject(InterfaceInfo interfaceInfo) {
+        return interfaceContextMap.get(interfaceInfo.getVersion()).getObject();
     }
+
+
 }

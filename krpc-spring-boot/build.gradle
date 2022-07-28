@@ -2,5 +2,4 @@ version '0.0.1-SNAPSHOT'
 
 dependencies {
     implementation project(':krpc-core')
-    implementation project(':krpc-example-interface')
 }

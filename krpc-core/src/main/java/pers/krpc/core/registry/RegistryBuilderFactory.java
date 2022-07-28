@@ -7,5 +7,8 @@ package pers.krpc.core.registry;
  * @author lanhaifeng
  * @since
  **/
-public interface RegistryInterface {
+public class RegistryBuilderFactory {
+
+    public
+
 }
