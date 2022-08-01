@@ -2,6 +2,8 @@ package pers.krpc.core.registry;
 
 
 import lombok.Setter;
+import pers.krpc.core.InterfaceContextDetails;
+import pers.krpc.core.InterfaceInfo;
 import pers.krpc.core.KrpcApplicationContext;
 
 /**
@@ -11,17 +13,24 @@ import pers.krpc.core.KrpcApplicationContext;
  * @author wangsicheng
  * @since
  **/
-public class RegistryService {
-
-    @Setter
-    private KrpcApplicationContext krpcApplicationContext;
+public class RegistryService  {
 
     @Setter
     private RegistryClient registryClient;
 
-    public void init(){
-
+    public static RegistryService build(RegistryClient registryClient){
+        RegistryService registryService = new RegistryService();
+        registryService.registryClient = registryClient;
+        return registryService;
     }
 
 
+
+    public void init(RegistryClientInfo registryClientInfo) {
+        this.registryClient.init(registryClientInfo);
+    }
+
+    public InterfaceContextDetails registerInterface(InterfaceInfo interfaceInfo, RegistryClient.Role role) {
+        return this.registryClient.registerInterface(interfaceInfo, role);
+    }
 }

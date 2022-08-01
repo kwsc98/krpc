@@ -18,7 +18,15 @@ public interface RegistryClient {
 
     public void init(RegistryClientInfo registryClientInfo);
 
-    public InterfaceContextDetails addListener(InterfaceInfo interfaceInfo);
+    public InterfaceContextDetails registerInterface(InterfaceInfo interfaceInfo,Role role);
+
+    public static enum Role{
+        /**
+         * Customer 注册消费者
+         * Provider 注册生产者
+         **/
+        Customer,Provider
+    }
 
 
 }

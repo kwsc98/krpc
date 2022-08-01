@@ -18,10 +18,19 @@ public class InterfaceContext{
     @Getter
     private Class<?> path;
 
-    private Map<String, InterfaceContextDetails> interfaceContextMap;
+    public Map<String, InterfaceContextDetails> interfaceContextMap;
 
     public Object getObject(InterfaceInfo interfaceInfo) {
         return interfaceContextMap.get(interfaceInfo.getVersion()).getObject();
+    }
+
+    public static InterfaceContext build(Class<?> path){
+        return new InterfaceContext().setPath(path);
+    }
+
+    public InterfaceContext setPath(Class<?> path) {
+        this.path = path;
+        return this;
     }
 
 

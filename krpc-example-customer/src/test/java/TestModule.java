@@ -1,7 +1,7 @@
-import pers.krpc.core.InterfaceContext;
-import pers.krpc.core.InterfaceContextDetails;
-import pers.krpc.core.InterfaceInfo;
-import pers.krpc.core.KrpcApplicationContext;
+import pers.krpc.core.*;
+import pers.krpc.core.registry.RegistryBuilderFactory;
+import pers.krpc.core.registry.RegistryClientInfo;
+import pers.krpc.core.registry.RegistryService;
 import pres.krpc.exampe.ExampeService;
 
 /**
@@ -16,7 +16,11 @@ public class TestModule {
     public static void main(String[] args) {
         try {
 
-            KrpcApplicationContext krpcApplicationContext = new KrpcApplicationContext();
+            KrpcApplicationContext krpcApplicationContext = KrpcBuilderFactory.builder()
+                    .setRegistryBuilderFactory(
+                            RegistryBuilderFactory.builder(RegistryClientInfo.build().setIp("127.0.0.1:2181").setClient(RegistryClientInfo.Client.Zookeeper)))
+                    .setPort("8081")
+                    .build();
             ExampeService exampeService = (ExampeService) krpcApplicationContext
                     .getService(InterfaceInfo.build()
                             .setInterfaceClass(ExampeService.class)

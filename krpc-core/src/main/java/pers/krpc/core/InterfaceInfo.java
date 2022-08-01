@@ -17,7 +17,7 @@ public class InterfaceInfo {
 
     private String version;
 
-    private long timeout;
+    private String timeout;
 
     public static InterfaceInfo build(){
         return new InterfaceInfo();
@@ -34,7 +34,7 @@ public class InterfaceInfo {
     }
 
     public InterfaceInfo setTimeout(long timeout) {
-        this.timeout = timeout;
+        this.timeout = String.valueOf(timeout);
         return this;
     }
 }
