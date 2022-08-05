@@ -4,6 +4,7 @@ package pers.krpc.core.registry;
 import pers.krpc.core.InterfaceContext;
 import pers.krpc.core.InterfaceContextDetails;
 import pers.krpc.core.InterfaceInfo;
+import pers.krpc.core.role.Role;
 
 import java.util.Map;
 
@@ -16,17 +17,11 @@ import java.util.Map;
  **/
 public interface RegistryClient {
 
+
     public void init(RegistryClientInfo registryClientInfo);
 
-    public InterfaceContextDetails registerInterface(InterfaceInfo interfaceInfo,Role role);
+    public InterfaceContextDetails registerInterface(InterfaceInfo interfaceInfo, Role role);
 
-    public static enum Role{
-        /**
-         * Customer 注册消费者
-         * Provider 注册生产者
-         **/
-        Customer,Provider
-    }
 
 
 }

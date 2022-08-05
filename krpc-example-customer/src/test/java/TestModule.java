@@ -14,7 +14,7 @@ import pres.krpc.exampe.ExampeService;
 public class TestModule {
 
     public static void main(String[] args) {
-        try {
+        
 
             KrpcApplicationContext krpcApplicationContext = KrpcBuilderFactory.builder()
                     .setRegistryBuilderFactory(
@@ -26,9 +26,8 @@ public class TestModule {
                             .setInterfaceClass(ExampeService.class)
                             .setVersion("1.0.0")
                             .setTimeout(1000));
-        } catch (Exception e) {
+            System.out.println();
 
-        }
 
     }
 

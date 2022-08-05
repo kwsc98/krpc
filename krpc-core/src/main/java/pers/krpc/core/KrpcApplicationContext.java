@@ -2,7 +2,10 @@ package pers.krpc.core;
 
 
 import lombok.Getter;
+import pers.krpc.core.proxy.ProxyService;
+import pers.krpc.core.registry.RegistryClient;
 import pers.krpc.core.registry.RegistryService;
+import pers.krpc.core.role.Role;
 import pers.krpc.core.role.ServerInfo;
 
 import java.net.InetAddress;
@@ -32,8 +35,9 @@ public class KrpcApplicationContext {
 
     public KrpcApplicationContext(RegistryService registryService, String port) {
         try {
-            serverInfo = ServerInfo.build().setPort(InetAddress.getLocalHost().getHostAddress()).setPort(port);
+            serverInfo = ServerInfo.build().setIp(InetAddress.getLocalHost().getHostAddress()).setPort(port);
             this.context = new HashMap<>();
+            this.registryService = registryService;
         } catch (Exception e) {
             throw new RuntimeException();
         }
@@ -46,15 +50,19 @@ public class KrpcApplicationContext {
     public InterfaceContext getInterfaceContext(Class<?> interfaceName) {
         return context.get(interfaceName.getName());
     }
-
-    public Object getService(InterfaceInfo interfaceInfo) {
+    @SuppressWarnings("unchecked")
+    public <T> T getService(InterfaceInfo interfaceInfo) {
         InterfaceContext interfaceContext = context.get(interfaceInfo.getInterfaceClass().getName());
         if (Objects.isNull(interfaceContext)) {
-            interfaceInfo temp = InterfaceContext.build(interfaceInfo.getInterfaceClass());
-            context.put(interfaceInfo.getInterfaceClass().getName(),temp);
+            interfaceContext = InterfaceContext.build(interfaceInfo.getInterfaceClass());
+            context.put(interfaceInfo.getInterfaceClass().getName(), interfaceContext);
         }
-        interfaceContext.getObject(interfaceInfo);
-        return interfaceContext.getObject(interfaceInfo);
+        if(!interfaceContext.contains(interfaceInfo)){
+            InterfaceContextDetails interfaceContextDetails = registryService.registerInterface(interfaceInfo, Role.Customer);
+            interfaceContextDetails.setObject(ProxyService.getProxy(interfaceContextDetails));
+            interfaceContext.put(interfaceInfo.getVersion(), interfaceContextDetails);
+        }
+        return (T) interfaceContext.getObject(interfaceInfo);
     }
 
 

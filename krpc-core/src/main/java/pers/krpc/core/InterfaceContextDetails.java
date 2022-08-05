@@ -1,10 +1,11 @@
 package pers.krpc.core;
 
 
-import lombok.Data;
-import org.springframework.beans.factory.FactoryBean;
+import lombok.Getter;
 import pers.krpc.core.role.Customer;
 import pers.krpc.core.role.Provider;
+import pers.krpc.core.role.Role;
+import pers.krpc.core.role.ServerInfo;
 
 import java.util.List;
 
@@ -18,7 +19,12 @@ import java.util.List;
 
 public class InterfaceContextDetails {
 
+    @Getter
     protected InterfaceInfo interfaceInfo;
+
+    @Getter
+    protected Role role;
+
 
     protected Object object;
 
@@ -30,7 +36,7 @@ public class InterfaceContextDetails {
         return this.object;
     }
 
-    public static InterfaceContextDetails build(InterfaceInfo interfaceInfo){
+    public static InterfaceContextDetails build(InterfaceInfo interfaceInfo) {
         return new InterfaceContextDetails().setInterfaceInfo(interfaceInfo);
     }
 
@@ -53,4 +59,19 @@ public class InterfaceContextDetails {
         this.customerList = customerList;
         return this;
     }
+
+    public InterfaceContextDetails setRole(Role role) {
+        this.role = role;
+        return this;
+    }
+
+    public String getPreNodePath() {
+        return "/" + interfaceInfo.getInterfaceClass().getName() + "/" + interfaceInfo.getVersion();
+    }
+
+    public String getNodePath() {
+        ServerInfo serverInfo = KrpcApplicationContext.getServerInfo().getCopyByTimeOut(interfaceInfo.getTimeout());
+        return getPreNodePath() + "/" + role + "/" + serverInfo.toString();
+    }
+
 }

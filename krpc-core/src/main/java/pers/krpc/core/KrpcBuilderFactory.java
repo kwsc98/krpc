@@ -11,8 +11,6 @@ import pers.krpc.core.registry.RegistryBuilderFactory;
  **/
 public class KrpcBuilderFactory {
 
-    private KrpcApplicationContext krpcApplicationContext;
-
     private RegistryBuilderFactory registryBuilderFactory;
 
     public String port;
@@ -22,8 +20,7 @@ public class KrpcBuilderFactory {
     }
 
     public KrpcApplicationContext build(){
-        krpcApplicationContext = new KrpcApplicationContext(this.registryBuilderFactory.build(),port);
-        return krpcApplicationContext;
+        return new KrpcApplicationContext(this.registryBuilderFactory.build(), port);
     }
 
     public KrpcBuilderFactory setRegistryBuilderFactory(RegistryBuilderFactory registryBuilderFactory) {

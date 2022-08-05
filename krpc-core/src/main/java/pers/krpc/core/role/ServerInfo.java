@@ -19,7 +19,7 @@ public class ServerInfo {
 
     private String timeOut;
 
-    public static ServerInfo build(){
+    public static ServerInfo build() {
         return new ServerInfo();
     }
 
@@ -38,11 +38,16 @@ public class ServerInfo {
         return this;
     }
 
-    public ServerInfo getCopyByTimeOut(String timeOut){
+    public ServerInfo getCopyByTimeOut(String timeOut) {
         return ServerInfo.build().setIp(this.ip).setPort(this.port).setTimeOut(timeOut);
     }
 
-    public String toString(){
-        return this.ip+":"+this.port+":"+this.timeOut;
+    public String toString() {
+        return this.ip + ":" + this.port + ":" + this.timeOut;
     }
+
+    public String toStringV2() {
+        return this.ip + ":" + this.port;
+    }
+
 }
