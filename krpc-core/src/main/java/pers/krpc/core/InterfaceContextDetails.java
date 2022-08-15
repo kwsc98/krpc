@@ -27,9 +27,9 @@ public class InterfaceContextDetails {
 
 
     protected Object object;
-
+    @Getter
     protected List<Provider> providerList;
-
+    @Getter
     protected List<Customer> customerList;
 
     public Object getObject() {

@@ -1,6 +1,9 @@
 package pres.krpc.exampe;
 
 
+import pers.krpc.core.role.ServerInfo;
+import pres.krpc.exampe.dto.RequestDTO;
+
 /**
  * krpc
  * 2022/7/26 15:06
@@ -9,5 +12,5 @@ package pres.krpc.exampe;
  * @since
  **/
 public interface ExampeService {
-    public String doRun(String str1,String str2);
+    public ServerInfo doRun(String str1);
 }

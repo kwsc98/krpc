@@ -7,6 +7,7 @@ import org.springframework.cglib.proxy.MethodInterceptor;
 import org.springframework.cglib.proxy.MethodProxy;
 import pers.krpc.core.InterfaceContextDetails;
 import pers.krpc.core.InterfaceInfo;
+import pers.krpc.core.protocol.NettyInvokerProxy;
 
 import java.lang.reflect.Method;
 
@@ -33,17 +34,15 @@ public class ProxyService {
 
     private static class CglibProxyInterceptor implements MethodInterceptor {
         //在这个拦截器里放一个过滤器链 SpringCglibProxy
-        InterfaceContextDetails interfaceContextDetails;
+        NettyInvokerProxy nettyInvokerProxy;
 
         public CglibProxyInterceptor(InterfaceContextDetails interfaceContextDetails) {
-            this.interfaceContextDetails = interfaceContextDetails;
+            this.nettyInvokerProxy = new NettyInvokerProxy(interfaceContextDetails);
         }
 
         @Override
         public Object intercept(Object o, Method method, Object[] objects, MethodProxy methodProxy) throws Throwable {
-            log.info("开始进行rpc调用");
-            Class<?> classz = interfaceContextDetails.getInterfaceInfo().getInterfaceClass();
-            return null;
+            return this.nettyInvokerProxy.invoke(o, method, objects);
         }
     }
 }

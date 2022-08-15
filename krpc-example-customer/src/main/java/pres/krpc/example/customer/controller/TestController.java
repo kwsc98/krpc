@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pers.krpc.core.InterfaceInfo;
 import pers.krpc.core.KrpcApplicationContext;
+import pers.krpc.core.role.ServerInfo;
 import pres.krpc.exampe.ExampeService;
+
 
 /**
  * krpc
@@ -27,20 +29,8 @@ public class TestController {
 
     @PostMapping("/test")
     public void test() throws JsonProcessingException {
-        ExampeService exampeService =
-                krpcApplicationContext.getService(
-                        InterfaceInfo.build()
-                                .setInterfaceClass(ExampeService.class)
-                                .setVersion("1.0.0")
-                                .setTimeout(1000));
-        ExampeService exampeService1 =
-                krpcApplicationContext.getService(
-                        InterfaceInfo.build()
-                                .setInterfaceClass(ExampeService.class)
-                                .setVersion("1.0.1")
-                                .setTimeout(1000));
-        exampeService.doRun("dsd","dsds");
-        exampeService1.doRun("dsd","dsds");
+        ExampeService exampeService = krpcApplicationContext.getService(InterfaceInfo.build().setInterfaceClass(ExampeService.class).setVersion("1.0.0").setTimeout(1000));
+        ServerInfo serverInfo = exampeService.doRun("dsd");
         System.out.println();
     }
 
