@@ -20,8 +20,13 @@ import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.extern.slf4j.Slf4j;
+import pers.krpc.core.InterfaceContext;
+import pers.krpc.core.InterfaceInfo;
+import pers.krpc.core.KrpcApplicationContext;
 import pers.krpc.core.protocol.KrpcMsg;
 import pers.krpc.core.role.ServerInfo;
+
+import java.lang.reflect.Method;
 
 /**
  * native server端的处理器
@@ -30,20 +35,27 @@ import pers.krpc.core.role.ServerInfo;
 @Slf4j
 public class NettyServerHandler extends SimpleChannelInboundHandler<KrpcMsg> {
 
+    private final KrpcApplicationContext krpcApplicationContext;
+
+    public NettyServerHandler(KrpcApplicationContext krpcApplicationContext) {
+        this.krpcApplicationContext = krpcApplicationContext;
+    }
+
+
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         log.info("accepted channel: {}", ctx.channel());
         log.info("accepted channel parent: {}", ctx.channel().parent());
-        // channel活跃
-        ctx.writeAndFlush("Channel Active状态!\r\n");
     }
 
     @Override
     public void channelRead0(ChannelHandlerContext ctx, KrpcMsg krpcresponse) throws Exception {
         log.info("接收到消息" + krpcresponse);
-        ServerInfo serverInfo = new ServerInfo();
-        serverInfo.setIp("cxcxc");
-        krpcresponse.setObject(serverInfo);
+        InterfaceContext interfaceContext = krpcApplicationContext.getInterfaceContext(krpcresponse.getClassName());
+        Object invokeObject = interfaceContext.getObject(krpcresponse.getVersion());
+        Method method = Class.forName(krpcresponse.getClassName()).getMethod(krpcresponse.getMethodName(),krpcresponse.getParameterTypes());
+        Object o = method.invoke(invokeObject,krpcresponse.getParams());
+        krpcresponse.setObject(o);
         // 写入消息
         ctx.writeAndFlush(krpcresponse);
     }

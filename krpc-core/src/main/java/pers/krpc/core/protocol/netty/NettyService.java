@@ -8,6 +8,7 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import lombok.extern.slf4j.Slf4j;
+import pers.krpc.core.KrpcApplicationContext;
 
 /**
  * krpc
@@ -18,33 +19,28 @@ import lombok.extern.slf4j.Slf4j;
  **/
 @Slf4j
 public class NettyService {
+    EventLoopGroup bossGroup;
+    EventLoopGroup workerGroup;
 
-    public void init(int port) {
-        EventLoopGroup bossGroup = new NioEventLoopGroup(1);
-        EventLoopGroup workerGroup = new NioEventLoopGroup();
+    public NettyService(int port, KrpcApplicationContext krpcApplicationContext) {
+        bossGroup = new NioEventLoopGroup(1);
+        workerGroup = new NioEventLoopGroup();
         try {
             ServerBootstrap b = new ServerBootstrap();
             b.group(bossGroup, workerGroup)
                     .channel(NioServerSocketChannel.class)
                     .handler(new LoggingHandler(LogLevel.INFO))
-                    .childHandler(new NettyInitializer<>(new NettyServerHandler()));
+                    .childHandler(new NettyInitializer<>(new NettyServerHandler(krpcApplicationContext)));
             Channel channel = b.bind(port).sync().channel();
             log.info("server channel:{}", channel);
-            channel.closeFuture().sync();
         } catch (Exception e) {
             log.error("创建netty服务异常");
-        } finally {
-            bossGroup.shutdownGracefully();
-            workerGroup.shutdownGracefully();
         }
     }
 
-
-
-
-    public static void main(String[] args) {
-        NettyService nettyService = new NettyService();
-        nettyService.init(8082);
+    public void close() {
+        bossGroup.shutdownGracefully();
+        workerGroup.shutdownGracefully();
     }
 
 }

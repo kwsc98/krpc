@@ -1,6 +1,5 @@
 rootProject.name = 'krpc'
 include 'krpc-core'
-include 'krpc-common'
 include 'krpc-example-provider'
 include 'krpc-example-customer'
 include 'krpc-example-interface'

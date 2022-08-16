@@ -3,6 +3,7 @@ package pres.krpc.example.customer.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.Mapping;
@@ -22,16 +23,18 @@ import pres.krpc.exampe.ExampeService;
  * @since
  **/
 @RestController
+@Slf4j
 public class TestController {
 
     @Autowired
     private KrpcApplicationContext krpcApplicationContext;
 
     @PostMapping("/test")
-    public void test() throws JsonProcessingException {
+    public ServerInfo test() throws JsonProcessingException {
         ExampeService exampeService = krpcApplicationContext.getService(InterfaceInfo.build().setInterfaceClass(ExampeService.class).setVersion("1.0.0").setTimeout(1000));
         ServerInfo serverInfo = exampeService.doRun("dsd");
-        System.out.println();
+        log.info(String.valueOf(serverInfo));
+        return serverInfo;
     }
 
 }

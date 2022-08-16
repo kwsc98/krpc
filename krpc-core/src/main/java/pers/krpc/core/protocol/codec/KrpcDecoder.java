@@ -29,8 +29,9 @@ public class KrpcDecoder extends MessageToMessageDecoder<ByteBuf> {
     public final void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
         String msg = in.toString(CHARSET);
         KrpcMsg krpcMsg = JSON_MAPPER.readValue(msg, KrpcMsg.class);
-        Method method =
-        krpcMsg.setObject(JSON_MAPPER.convertValue(krpcMsg.getObject(),krpcMsg.getMethod().getReturnType()));
+        Class<?> clazz = Class.forName(krpcMsg.getClassName());
+        Method method = clazz.getMethod(krpcMsg.getMethodName(), krpcMsg.getParameterTypes());
+        krpcMsg.setObject(JSON_MAPPER.convertValue(krpcMsg.getObject(), method.getReturnType()));
         out.add(krpcMsg);
     }
 }

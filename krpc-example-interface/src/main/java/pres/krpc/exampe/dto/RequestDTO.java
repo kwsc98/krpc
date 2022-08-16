@@ -1,6 +1,7 @@
 package pres.krpc.exampe.dto;
 
 
+import lombok.Data;
 import lombok.Getter;
 
 import java.util.Date;
@@ -12,7 +13,7 @@ import java.util.Date;
  * @author wangsicheng
  * @since
  **/
-@Getter
+@Data
 public class RequestDTO {
 
     private String paprm1 = "很大声的撒的谎";

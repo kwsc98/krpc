@@ -22,7 +22,11 @@ public class InterfaceContext {
     public Map<String, InterfaceContextDetails> interfaceContextMap;
 
     public Object getObject(InterfaceInfo interfaceInfo) {
-        return interfaceContextMap.get(interfaceInfo.getVersion()).getObject();
+        return getObject(interfaceInfo.getVersion());
+    }
+
+    public Object getObject(String version) {
+        return interfaceContextMap.get(version).getObject();
     }
 
     public boolean contains(InterfaceInfo interfaceInfo){
@@ -34,7 +38,7 @@ public class InterfaceContext {
     }
 
     public static InterfaceContext build(Class<?> path) {
-        return new InterfaceContext().setPath(path).setInterfaceContextMap(new HashMap<>());
+        return new InterfaceContext().setPath(path).setInterfaceContextMap(new HashMap<>(4));
     }
 
     public InterfaceContext setPath(Class<?> path) {

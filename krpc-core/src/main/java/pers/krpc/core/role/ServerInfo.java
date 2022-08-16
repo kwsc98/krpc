@@ -2,6 +2,7 @@ package pers.krpc.core.role;
 
 
 import lombok.Getter;
+import lombok.ToString;
 
 /**
  * krpc

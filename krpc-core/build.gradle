@@ -1,7 +1,6 @@
 version '1.2-SNAPSHOT'
 
 dependencies {
-    implementation project(':krpc-common')
     implementation 'org.apache.curator:curator-x-discovery:5.3.0'
     implementation 'io.netty:netty-all:4.1.79.Final'
     implementation 'com.github.ben-manes.caffeine:caffeine:2.9.3'

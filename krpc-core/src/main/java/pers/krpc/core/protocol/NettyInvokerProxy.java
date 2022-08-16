@@ -54,12 +54,12 @@ public class NettyInvokerProxy implements InvocationHandler {
     private Channel getChannel(List<Provider> providerList) {
         if (Objects.isNull(providerList) || providerList.isEmpty()) {
             log.info("该接口未找到生产者");
-            return NettyApplicationContext.getChannel("127.0.0.1", 8082);
+            throw new RuntimeException();
         }
         int index = new Random().nextInt(providerList.size());
         Provider provider = providerList.get(index);
         Channel channel = channelMap.get(provider.toChannelKey());
-        if (Objects.isNull(channel)) {
+        if (Objects.isNull(channel) || !channel.isActive()) {
             ServerInfo serverInfo = provider.getServerInfo();
             channel = NettyApplicationContext.getChannel(serverInfo.getIp(), Integer.parseInt(serverInfo.getPort()));
             channelMap.put(provider.toChannelKey(), channel);

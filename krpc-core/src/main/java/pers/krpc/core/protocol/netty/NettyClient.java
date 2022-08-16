@@ -45,8 +45,6 @@ public final class NettyClient {
 
     private final Bootstrap bootstrap;
 
-    @Getter
-    public static final Map<String, Promise<String>> map = new ConcurrentHashMap<>();
 
     NettyClient() {
         EventLoopGroup group = new NioEventLoopGroup();
@@ -63,20 +61,5 @@ public final class NettyClient {
             log.error("Netty建立连接异常", e);
             throw new RuntimeException();
         }
-    }
-
-    public static void main(String[] args) throws ExecutionException, InterruptedException, TimeoutException, IOException {
-        NettyClient nettyClient = new NettyClient();
-        Channel channel = nettyClient.getChannel("127.0.0.1",8082);
-        KrpcMsg krpcMsg = new KrpcMsg();
-        krpcMsg.setUniqueIdentifier("dsdsdsdsds");
-        ServerInfo serverInfo = new ServerInfo();
-        serverInfo.setIp("we2e2e3e23e");
-        krpcMsg.setObject(serverInfo);
-        Promise<Object> promise = new DefaultPromise<>(new DefaultEventLoop());
-        NettyApplicationContext.getMSG_CACHE().put("dsdsdsdsds",promise);
-        channel.writeAndFlush(krpcMsg);
-        Object o = promise.get(10000, TimeUnit.MILLISECONDS);
-        System.out.println();
     }
 }

@@ -25,7 +25,6 @@ public class InterfaceContextDetails {
     @Getter
     protected Role role;
 
-
     protected Object object;
     @Getter
     protected List<Provider> providerList;

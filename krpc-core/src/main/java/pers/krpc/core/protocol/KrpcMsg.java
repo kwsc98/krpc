@@ -20,13 +20,16 @@ public class KrpcMsg {
     private String version;
     private String className;
     private String methodName;
+    private Class<?>[] parameterTypes;
     private Object[] params;
     private Object object;
 
     public static KrpcMsg build(Class<?> className, Method method, Object[] args, String version) {
-        return new KrpcMsg().setVersion(version)
+        return new KrpcMsg()
+                .setVersion(version)
                 .setUniqueIdentifier(UUID.randomUUID().toString())
                 .setClassName(className.getName())
+                .setParameterTypes(method.getParameterTypes())
                 .setMethodName(method.getName())
                 .setParams(args);
     }
@@ -48,6 +51,11 @@ public class KrpcMsg {
 
     public KrpcMsg setMethodName(String methodName) {
         this.methodName = methodName;
+        return this;
+    }
+
+    public KrpcMsg setParameterTypes(Class<?>[] parameterTypes) {
+        this.parameterTypes = parameterTypes;
         return this;
     }
 
