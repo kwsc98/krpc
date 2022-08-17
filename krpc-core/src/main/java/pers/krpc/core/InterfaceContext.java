@@ -2,10 +2,8 @@ package pers.krpc.core;
 
 
 import lombok.Getter;
-import org.springframework.beans.factory.FactoryBean;
-
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * krpc
@@ -38,7 +36,7 @@ public class InterfaceContext {
     }
 
     public static InterfaceContext build(Class<?> path) {
-        return new InterfaceContext().setPath(path).setInterfaceContextMap(new HashMap<>(4));
+        return new InterfaceContext().setPath(path).setInterfaceContextMap(new ConcurrentHashMap<>(4));
     }
 
     public InterfaceContext setPath(Class<?> path) {

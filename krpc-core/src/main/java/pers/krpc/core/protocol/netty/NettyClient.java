@@ -21,20 +21,8 @@ import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.util.concurrent.DefaultPromise;
-import io.netty.util.concurrent.Promise;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import pers.krpc.core.protocol.KrpcMsg;
-import pers.krpc.core.role.Provider;
-import pers.krpc.core.role.ServerInfo;
 
-import java.io.IOException;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 /**
  * 聊天室客户端

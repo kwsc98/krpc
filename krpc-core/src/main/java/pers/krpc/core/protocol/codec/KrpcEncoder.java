@@ -28,11 +28,7 @@ public class KrpcEncoder extends MessageToMessageEncoder<KrpcMsg> {
 
     @Override
     protected void encode(ChannelHandlerContext ctx, KrpcMsg msg, List<Object> out) throws Exception {
-        try{
-            String jsonStr = JSON_MAPPER.writeValueAsString(msg) + "\r\n";
-            out.add(ByteBufUtil.encodeString(ctx.alloc(), CharBuffer.wrap(jsonStr), CHARSET));
-        }catch (Exception e){
-            System.out.println(e);
-        }
+        String jsonStr = JSON_MAPPER.writeValueAsString(msg) + "\r\n";
+        out.add(ByteBufUtil.encodeString(ctx.alloc(), CharBuffer.wrap(jsonStr), CHARSET));
     }
 }

@@ -7,6 +7,7 @@ import pers.krpc.core.InterfaceInfo;
 import pers.krpc.core.role.Role;
 
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * krpc
@@ -17,6 +18,9 @@ import java.util.Map;
  **/
 public interface RegistryClient {
 
+    public static final String ROOT_PATH = "krpcApplication";
+
+    public Map<String, InterfaceContextDetails> INTERFACE_CACHE = new ConcurrentHashMap<>(8);
 
     public void init(RegistryClientInfo registryClientInfo);
 

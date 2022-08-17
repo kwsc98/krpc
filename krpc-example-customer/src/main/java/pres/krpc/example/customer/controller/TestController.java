@@ -13,6 +13,10 @@ import pers.krpc.core.InterfaceInfo;
 import pers.krpc.core.KrpcApplicationContext;
 import pers.krpc.core.role.ServerInfo;
 import pres.krpc.exampe.ExampeService;
+import pres.krpc.exampe.dto.RequestDTO;
+import pres.krpc.exampe.dto.ResponseDTO;
+
+import java.util.Date;
 
 
 /**
@@ -30,11 +34,12 @@ public class TestController {
     private KrpcApplicationContext krpcApplicationContext;
 
     @PostMapping("/test")
-    public ServerInfo test() throws JsonProcessingException {
+    public ResponseDTO test() {
         ExampeService exampeService = krpcApplicationContext.getService(InterfaceInfo.build().setInterfaceClass(ExampeService.class).setVersion("1.0.0").setTimeout(1000));
-        ServerInfo serverInfo = exampeService.doRun("dsd");
-        log.info(String.valueOf(serverInfo));
-        return serverInfo;
+        RequestDTO requestDTO = new RequestDTO();
+        requestDTO.setData("哈哈哈哈");
+        requestDTO.setDate(new Date());
+        return exampeService.doRun(requestDTO);
     }
 
 }

@@ -22,11 +22,14 @@ public class KrpcConfiguration {
     @Value("${krpc.registeredPath}")
     private String registeredPath;
 
+    @Value("${krpc.registeredType}")
+    private String registeredType;
+
     @Bean
     public KrpcApplicationContext init(){
         return KrpcBuilderFactory.builder()
                 .setRegistryBuilderFactory(
-                        RegistryBuilderFactory.builder(RegistryClientInfo.build().setIp("127.0.0.1:2181").setClient(RegistryClientInfo.Client.Zookeeper)))
+                        RegistryBuilderFactory.builder(RegistryClientInfo.build().setServerAddr(registeredPath).setClient(registeredType)))
                 .build();
     }
 

@@ -4,6 +4,8 @@ package pres.krpc.example.provider.service;
 import org.springframework.stereotype.Service;
 import pers.krpc.core.role.ServerInfo;
 import pres.krpc.exampe.ExampeService;
+import pres.krpc.exampe.dto.RequestDTO;
+import pres.krpc.exampe.dto.ResponseDTO;
 
 /**
  * krpc
@@ -14,8 +16,12 @@ import pres.krpc.exampe.ExampeService;
  **/
 @Service
 public class ExampeServiceImpl implements ExampeService {
+
     @Override
-    public ServerInfo doRun(String str1) {
-        return new ServerInfo().setIp("测试成功").setPort(str1);
+    public ResponseDTO doRun(RequestDTO requestDTO) {
+        ResponseDTO responseDTO = new ResponseDTO();
+        responseDTO.setData(requestDTO.getData()+"doRun");
+        responseDTO.setDate(requestDTO.getDate());
+        return responseDTO;
     }
 }

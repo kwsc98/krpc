@@ -1,4 +1,4 @@
-package pers.krpc.core.registry;
+package pers.krpc.core.registry.impl;
 
 
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +11,8 @@ import org.apache.curator.retry.ExponentialBackoffRetry;
 import org.apache.zookeeper.CreateMode;
 import pers.krpc.core.InterfaceContextDetails;
 import pers.krpc.core.InterfaceInfo;
+import pers.krpc.core.registry.RegistryClient;
+import pers.krpc.core.registry.RegistryClientInfo;
 import pers.krpc.core.role.Customer;
 import pers.krpc.core.role.Provider;
 import pers.krpc.core.role.Role;
@@ -32,17 +34,12 @@ public class ZookeeperClient implements RegistryClient, CuratorCacheListener, Co
 
     private CuratorFramework curatorFramework;
 
-    private Map<String, InterfaceContextDetails> interfaceCache;
-
-    private static final String ROOT_PATH = "krpcApplication";
-
     @Override
     public void init(RegistryClientInfo registryClientInfo) {
         try {
             log.info("开始初始化zookeeper注册中心");
-            this.interfaceCache = new LinkedHashMap<>();
             //创建curator客户端
-            this.curatorFramework = CuratorFrameworkFactory.newClient(registryClientInfo.getIp(), 5000, 20000, new ExponentialBackoffRetry(1000, 100));
+            this.curatorFramework = CuratorFrameworkFactory.newClient(registryClientInfo.getServerAddr(), 5000, 20000, new ExponentialBackoffRetry(1000, 100));
             curatorFramework.start();
             if (curatorFramework.checkExists().forPath("/" + ROOT_PATH) == null) {
                 curatorFramework.create().creatingParentsIfNeeded().forPath("/" + ROOT_PATH);
@@ -71,7 +68,7 @@ public class ZookeeperClient implements RegistryClient, CuratorCacheListener, Co
         }
         log.info("监听到节点变更[{}],旧节点[{}],新节点[{}]", type, oldData, data);
         String interfacePath = "/" + pathArray[1] + "/" + pathArray[2];
-        InterfaceContextDetails interfaceContextDetails = interfaceCache.get(interfacePath);
+        InterfaceContextDetails interfaceContextDetails = INTERFACE_CACHE.get(interfacePath);
         if (interfaceContextDetails == null) {
             return;
         }
@@ -98,7 +95,7 @@ public class ZookeeperClient implements RegistryClient, CuratorCacheListener, Co
     public InterfaceContextDetails registerInterface(InterfaceInfo interfaceInfo, Role role) {
         try {
             InterfaceContextDetails interfaceContextDetails = new InterfaceContextDetails().setInterfaceInfo(interfaceInfo).setRole(role);
-            this.interfaceCache.put(interfaceContextDetails.getPreNodePath(), interfaceContextDetails);
+            INTERFACE_CACHE.put(interfaceContextDetails.getPreNodePath(), interfaceContextDetails);
             curatorFramework.create().creatingParentsIfNeeded().withMode(CreateMode.EPHEMERAL).forPath(interfaceContextDetails.getNodePath());
             return interfaceContextDetails;
         } catch (Exception e) {
@@ -111,7 +108,7 @@ public class ZookeeperClient implements RegistryClient, CuratorCacheListener, Co
         log.info("监听到连接变动:client:[{}]  ConnectionState:[{}]", client, newState);
         if (ConnectionState.RECONNECTED.equals(newState)) {
             log.info("检测到连接重连，开始进行节点重新注册");
-            for (InterfaceContextDetails interfaceContextDetails : interfaceCache.values()) {
+            for (InterfaceContextDetails interfaceContextDetails : INTERFACE_CACHE.values()) {
                 try {
                     curatorFramework.create().creatingParentsIfNeeded().withMode(CreateMode.EPHEMERAL).forPath(interfaceContextDetails.getNodePath());
                 } catch (Exception e) {

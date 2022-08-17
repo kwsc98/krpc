@@ -42,12 +42,11 @@ public class NettyInvokerProxy implements InvocationHandler {
 
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        Channel channel = getChannel(interfaceContextDetails.getProviderList());
         InterfaceInfo interfaceInfo = interfaceContextDetails.getInterfaceInfo();
         KrpcMsg krpcMsg = KrpcMsg.build(interfaceInfo.getInterfaceClass(), method, args, interfaceInfo.getVersion());
         Promise<Object> promise = new DefaultPromise<>(new DefaultEventLoop());
         NettyApplicationContext.getMSG_CACHE().put(krpcMsg.getUniqueIdentifier(), promise);
-        channel.writeAndFlush(krpcMsg);
+        getChannel(interfaceContextDetails.getProviderList()).writeAndFlush(krpcMsg);
         return promise.get(Long.parseLong(interfaceInfo.getTimeout()), TimeUnit.MILLISECONDS);
     }
 
@@ -61,7 +60,7 @@ public class NettyInvokerProxy implements InvocationHandler {
         Channel channel = channelMap.get(provider.toChannelKey());
         if (Objects.isNull(channel) || !channel.isActive()) {
             ServerInfo serverInfo = provider.getServerInfo();
-            channel = NettyApplicationContext.getChannel(serverInfo.getIp(), Integer.parseInt(serverInfo.getPort()));
+            channel = NettyApplicationContext.getChannel(serverInfo.getIp(), serverInfo.getPortByInt());
             channelMap.put(provider.toChannelKey(), channel);
         }
         return channel;

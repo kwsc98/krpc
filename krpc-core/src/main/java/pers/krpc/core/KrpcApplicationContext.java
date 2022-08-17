@@ -5,15 +5,13 @@ import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 import pers.krpc.core.protocol.netty.NettyApplicationContext;
 import pers.krpc.core.proxy.ProxyService;
-import pers.krpc.core.registry.RegistryClient;
 import pers.krpc.core.registry.RegistryService;
 import pers.krpc.core.role.Role;
 import pers.krpc.core.role.ServerInfo;
-
 import java.net.InetAddress;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * KrpcApplicationContext
@@ -38,7 +36,7 @@ public class KrpcApplicationContext {
     public KrpcApplicationContext(RegistryService registryService, String port) {
         try {
             serverInfo = ServerInfo.build().setIp(InetAddress.getLocalHost().getHostAddress()).setPort(port);
-            this.context = new HashMap<>();
+            this.context = new ConcurrentHashMap<>();
             this.registryService = registryService;
             this.nettyApplicationContext = new NettyApplicationContext();
             if(StringUtils.isNotBlank(port)){

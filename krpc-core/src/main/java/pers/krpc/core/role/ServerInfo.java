@@ -1,8 +1,14 @@
 package pers.krpc.core.role;
 
 
+import com.alibaba.nacos.api.naming.pojo.Instance;
+import lombok.Data;
 import lombok.Getter;
 import lombok.ToString;
+import org.apache.commons.lang3.StringUtils;
+
+import java.io.Serializable;
+import java.util.Map;
 
 /**
  * krpc
@@ -11,7 +17,7 @@ import lombok.ToString;
  * @author wangsicheng
  * @since
  **/
-@Getter
+@Data
 public class ServerInfo {
 
     private String ip;
@@ -19,6 +25,17 @@ public class ServerInfo {
     private String port;
 
     private String timeOut;
+
+    public static ServerInfo build(String s) {
+        String[] strings = s.split(":");
+        return ServerInfo.build().setIp(strings[0]).setPort(strings[1]).setTimeOut(strings[2]);
+    }
+
+    public static ServerInfo build(Instance instance) {
+        Map<String, String> map = instance.getMetadata();
+        String timeOut = map.getOrDefault(Role.Customer.name(), map.getOrDefault(Role.Provider.name(), null));
+        return ServerInfo.build().setIp(instance.getIp()).setPort(String.valueOf(instance.getPort())).setTimeOut(timeOut);
+    }
 
     public static ServerInfo build() {
         return new ServerInfo();
@@ -32,6 +49,10 @@ public class ServerInfo {
     public ServerInfo setPort(String port) {
         this.port = port;
         return this;
+    }
+
+    public int getPortByInt() {
+        return StringUtils.isEmpty(this.port) ? 0 : Integer.parseInt(this.port);
     }
 
     public ServerInfo setTimeOut(String timeOut) {

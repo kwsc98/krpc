@@ -13,6 +13,7 @@ import pers.krpc.core.protocol.KrpcMsg;
 import java.lang.reflect.Method;
 import java.nio.charset.Charset;
 import java.util.List;
+import java.util.Objects;
 
 public class KrpcDecoder extends MessageToMessageDecoder<ByteBuf> {
 
@@ -31,6 +32,13 @@ public class KrpcDecoder extends MessageToMessageDecoder<ByteBuf> {
         KrpcMsg krpcMsg = JSON_MAPPER.readValue(msg, KrpcMsg.class);
         Class<?> clazz = Class.forName(krpcMsg.getClassName());
         Method method = clazz.getMethod(krpcMsg.getMethodName(), krpcMsg.getParameterTypes());
+        Object[] objects = krpcMsg.getParams();
+        Class<?>[] parameterTypes = krpcMsg.getParameterTypes();
+        if (Objects.nonNull(objects)) {
+            for (int i = 0; i < objects.length; i++) {
+                objects[i] = JSON_MAPPER.convertValue(objects[i], parameterTypes[i]);
+            }
+        }
         krpcMsg.setObject(JSON_MAPPER.convertValue(krpcMsg.getObject(), method.getReturnType()));
         out.add(krpcMsg);
     }

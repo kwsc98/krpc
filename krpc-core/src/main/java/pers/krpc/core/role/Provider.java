@@ -1,7 +1,10 @@
 package pers.krpc.core.role;
 
 
+import com.alibaba.nacos.api.naming.pojo.Instance;
 import lombok.Getter;
+
+import java.util.Map;
 
 /**
  * krpc
@@ -14,16 +17,25 @@ public class Provider {
     @Getter
     private ServerInfo serverInfo;
 
-    public String toChannelKey(){
+    public static Provider build(ServerInfo serverInfo){
+        return new Provider().setServerInfo(serverInfo);
+    }
+
+    public Provider setServerInfo(ServerInfo serverInfo) {
+        this.serverInfo = serverInfo;
+        return this;
+    }
+
+    public String toChannelKey() {
         return serverInfo.toStringV2();
     }
 
-    public static Provider build(String s){
-        String[] strings = s.split(":");
-        Provider provider = new Provider();
-        provider.serverInfo = ServerInfo.build().setIp(strings[0]).setPort(strings[1]).setTimeOut(strings[2]);
-        return provider;
+    public static Provider build(String s) {
+        return build(ServerInfo.build(s));
     }
 
+    public static Provider build(Instance instance) {
+        return build(ServerInfo.build(instance));
+    }
 
 }

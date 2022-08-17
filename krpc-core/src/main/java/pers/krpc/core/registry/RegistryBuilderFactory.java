@@ -1,5 +1,8 @@
 package pers.krpc.core.registry;
 
+import pers.krpc.core.registry.impl.NacosClient;
+import pers.krpc.core.registry.impl.ZookeeperClient;
+
 /**
  * krpc
  * 2022/7/25 16:03
@@ -18,13 +21,17 @@ public class RegistryBuilderFactory {
     public RegistryService build() {
         RegistryService registryService = null;
         switch (registryClientInfo.getClient()) {
+            case Nacos:
+                registryService = RegistryService.build(new NacosClient());
+                break;
             case Zookeeper:
                 registryService = RegistryService.build(new ZookeeperClient());
-                registryService.init(registryClientInfo);
-                return registryService;
+                break;
             default:
                 throw new RuntimeException();
         }
+        registryService.init(registryClientInfo);
+        return registryService;
     }
 
     public RegistryBuilderFactory setRegistryClientInfo(RegistryClientInfo registryClientInfo) {

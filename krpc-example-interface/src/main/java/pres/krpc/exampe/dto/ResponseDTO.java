@@ -2,19 +2,17 @@ package pres.krpc.exampe.dto;
 
 
 import lombok.Data;
-import lombok.Getter;
 
 import java.util.Date;
 
 /**
  * krpc
- * 2022/8/12 16:42
+ * 2022/8/17 18:45
  *
  * @author wangsicheng
- * @since
  **/
 @Data
-public class RequestDTO {
+public class ResponseDTO {
 
     private String data;
 

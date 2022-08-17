@@ -3,6 +3,7 @@ package pres.krpc.exampe;
 
 import pers.krpc.core.role.ServerInfo;
 import pres.krpc.exampe.dto.RequestDTO;
+import pres.krpc.exampe.dto.ResponseDTO;
 
 /**
  * krpc
@@ -12,5 +13,5 @@ import pres.krpc.exampe.dto.RequestDTO;
  * @since
  **/
 public interface ExampeService {
-    public ServerInfo doRun(String str1);
+     ResponseDTO doRun(RequestDTO requestDTO);
 }
