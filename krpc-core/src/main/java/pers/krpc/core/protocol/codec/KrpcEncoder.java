@@ -15,6 +15,10 @@ import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 import java.util.List;
 
+/**
+ * krpc编码器
+ * @author kwsc98
+ */
 public class KrpcEncoder extends MessageToMessageEncoder<KrpcMsg> {
 
     private static final JsonMapper JSON_MAPPER;

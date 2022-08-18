@@ -7,11 +7,10 @@ import lombok.Getter;
 import java.util.Map;
 
 /**
- * krpc
+ * krpc消费者
  * 2022/7/25 15:47
  *
  * @author wangsicheng
- * @since
  **/
 public class Customer {
 

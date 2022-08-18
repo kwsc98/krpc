@@ -26,21 +26,21 @@ import java.util.Objects;
 
 /**
  * 客户端处理器
+ *
  * @author kwsc98
  */
 @Sharable
 @Slf4j
 public class NettyClientHandler extends SimpleChannelInboundHandler<KrpcMsg> {
 
-
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, KrpcMsg krpcMsg) throws Exception {
-        log.info("接收到消息" + krpcMsg);
-        Promise<Object> promise = NettyApplicationContext.getMSG_CACHE().getIfPresent(krpcMsg.getUniqueIdentifier());
+    protected void channelRead0(ChannelHandlerContext ctx, KrpcMsg krpcMsg) {
+        log.debug("客户端获取响应:[{}]",krpcMsg);
+        //从共享变量中获取Promise
+        Promise<Object> promise = NettyApplicationContext.MSG_CACHE.getIfPresent(krpcMsg.getUniqueIdentifier());
         if (Objects.nonNull(promise)) {
             promise.setSuccess(krpcMsg.getObject());
         }
-        log.info("client accepted channel: {}", ctx.channel());
     }
 
     @Override

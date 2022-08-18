@@ -15,8 +15,6 @@
  */
 package pers.krpc.core.protocol.netty;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.json.JsonMapper;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -25,14 +23,13 @@ import lombok.extern.slf4j.Slf4j;
 
 
 /**
- * 聊天室客户端
+ * Netty客户端
+ * @author kwsc98
  */
 @Slf4j
 public final class NettyClient {
 
-
     private final Bootstrap bootstrap;
-
 
     NettyClient() {
         EventLoopGroup group = new NioEventLoopGroup();

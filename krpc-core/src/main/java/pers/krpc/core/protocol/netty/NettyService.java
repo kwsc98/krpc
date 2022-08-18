@@ -11,11 +11,10 @@ import lombok.extern.slf4j.Slf4j;
 import pers.krpc.core.KrpcApplicationContext;
 
 /**
- * krpc
+ * 服务端
  * 2022/8/9 16:48
  *
  * @author wangsicheng
- * @since
  **/
 @Slf4j
 public class NettyService {

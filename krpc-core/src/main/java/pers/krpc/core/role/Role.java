@@ -1,11 +1,10 @@
 package pers.krpc.core.role;
 
 /**
- * krpc
+ * krpc角色枚举
  * 2022/8/5 14:29
  *
  * @author lanhaifeng
- * @since
  **/
 public enum Role {
     /**

@@ -4,10 +4,6 @@ plugins {
     id 'io.spring.dependency-management' version '1.0.12.RELEASE'
 }
 
-group = 'pres.krpc'
-version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '11'
-
 configurations {
     compileOnly {
         extendsFrom annotationProcessor
@@ -25,6 +21,8 @@ allprojects {
 
 subprojects {
     group = 'pres.krpc'
+    version = '0.0.1-SNAPSHOT'
+    sourceCompatibility = '8'
     apply plugin: 'java'
     apply plugin: 'org.springframework.boot'
     apply plugin: 'io.spring.dependency-management'

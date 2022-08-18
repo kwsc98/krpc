@@ -3,11 +3,10 @@ package pers.krpc.core;
 import pers.krpc.core.registry.RegistryBuilderFactory;
 
 /**
- * krpc
+ * krpc构建工厂
  * 2022/7/28 15:32
  *
  * @author lanhaifeng
- * @since
  **/
 public class KrpcBuilderFactory {
 

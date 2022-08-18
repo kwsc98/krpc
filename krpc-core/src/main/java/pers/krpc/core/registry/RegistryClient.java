@@ -1,30 +1,35 @@
 package pers.krpc.core.registry;
 
 
-import pers.krpc.core.InterfaceContext;
 import pers.krpc.core.InterfaceContextDetails;
 import pers.krpc.core.InterfaceInfo;
 import pers.krpc.core.role.Role;
-
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * krpc
+ * krpc注册中心接口
  * 2022/7/28 15:53
  *
  * @author wangsicheng
- * @since
  **/
 public interface RegistryClient {
 
-    public static final String ROOT_PATH = "krpcApplication";
+    String ROOT_PATH = "krpcApplication";
+    /**
+     * 接口实例缓存
+     **/
+    Map<String, InterfaceContextDetails> INTERFACE_CACHE = new ConcurrentHashMap<>(8);
 
-    public Map<String, InterfaceContextDetails> INTERFACE_CACHE = new ConcurrentHashMap<>(8);
+    /**
+     * 注册中心初始化方法
+     **/
+    void init(RegistryClientInfo registryClientInfo);
 
-    public void init(RegistryClientInfo registryClientInfo);
-
-    public InterfaceContextDetails registerInterface(InterfaceInfo interfaceInfo, Role role);
+    /**
+     * 注册服务方法
+     **/
+    InterfaceContextDetails registerInterface(InterfaceInfo interfaceInfo, Role role);
 
 
 

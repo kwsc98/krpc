@@ -3,19 +3,14 @@ package pers.krpc.core.role;
 
 import com.alibaba.nacos.api.naming.pojo.Instance;
 import lombok.Data;
-import lombok.Getter;
-import lombok.ToString;
 import org.apache.commons.lang3.StringUtils;
-
-import java.io.Serializable;
 import java.util.Map;
 
 /**
- * krpc
+ * krpc服务ip信息
  * 2022/7/25 15:50
  *
  * @author wangsicheng
- * @since
  **/
 @Data
 public class ServerInfo {

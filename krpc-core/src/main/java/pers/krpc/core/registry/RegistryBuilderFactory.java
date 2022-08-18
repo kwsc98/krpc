@@ -4,11 +4,10 @@ import pers.krpc.core.registry.impl.NacosClient;
 import pers.krpc.core.registry.impl.ZookeeperClient;
 
 /**
- * krpc
+ * krpc注册中心构建工厂
  * 2022/7/25 16:03
  *
  * @author lanhaifeng
- * @since
  **/
 public class RegistryBuilderFactory {
 

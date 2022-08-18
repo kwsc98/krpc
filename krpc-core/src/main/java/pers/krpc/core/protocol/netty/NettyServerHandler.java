@@ -15,21 +15,21 @@
  */
 package pers.krpc.core.protocol.netty;
 
-import com.fasterxml.jackson.databind.json.JsonMapper;
 import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.extern.slf4j.Slf4j;
 import pers.krpc.core.InterfaceContext;
-import pers.krpc.core.InterfaceInfo;
 import pers.krpc.core.KrpcApplicationContext;
 import pers.krpc.core.protocol.KrpcMsg;
-import pers.krpc.core.role.ServerInfo;
+
 
 import java.lang.reflect.Method;
 
 /**
  * native server端的处理器
+ *
+ * @author kwsc98
  */
 @Sharable
 @Slf4j
@@ -41,28 +41,20 @@ public class NettyServerHandler extends SimpleChannelInboundHandler<KrpcMsg> {
         this.krpcApplicationContext = krpcApplicationContext;
     }
 
-
     @Override
-    public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        log.info("accepted channel: {}", ctx.channel());
-        log.info("accepted channel parent: {}", ctx.channel().parent());
+    public void channelActive(ChannelHandlerContext ctx) {
+        log.info("Channel连接建立: [{}] parent [{}]", ctx.channel(), ctx.channel().parent());
     }
 
     @Override
-    public void channelRead0(ChannelHandlerContext ctx, KrpcMsg krpcresponse) throws Exception {
-        log.info("接收到消息" + krpcresponse);
-        InterfaceContext interfaceContext = krpcApplicationContext.getInterfaceContext(krpcresponse.getClassName());
-        Object invokeObject = interfaceContext.getObject(krpcresponse.getVersion());
-        Method method = Class.forName(krpcresponse.getClassName()).getMethod(krpcresponse.getMethodName(),krpcresponse.getParameterTypes());
-        Object o = method.invoke(invokeObject,krpcresponse.getParams());
-        krpcresponse.setObject(o);
-        // 写入消息
-        ctx.writeAndFlush(krpcresponse);
-    }
-
-    @Override
-    public void channelReadComplete(ChannelHandlerContext ctx) {
-        ctx.flush();
+    public void channelRead0(ChannelHandlerContext ctx, KrpcMsg krpcRequest) throws Exception {
+        log.debug("服务端获取请求:[{}]",krpcRequest);
+        InterfaceContext interfaceContext = krpcApplicationContext.getInterfaceContext(krpcRequest.getClassName());
+        Object invokeObject = interfaceContext.getObject(krpcRequest.getVersion());
+        Method method = Class.forName(krpcRequest.getClassName()).getMethod(krpcRequest.getMethodName(), krpcRequest.getParameterTypes());
+        Object o = method.invoke(invokeObject, krpcRequest.getParams());
+        krpcRequest.setObject(o);
+        ctx.writeAndFlush(krpcRequest);
     }
 
     @Override

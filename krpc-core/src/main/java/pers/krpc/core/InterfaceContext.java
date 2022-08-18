@@ -6,11 +6,10 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * krpc
+ * krpc服务接口Context
  * 2022/7/25 15:38
  *
  * @author wangsicheng
- * @since
  **/
 public class InterfaceContext {
 

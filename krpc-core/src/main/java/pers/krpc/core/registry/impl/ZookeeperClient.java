@@ -66,8 +66,8 @@ public class ZookeeperClient implements RegistryClient, CuratorCacheListener, Co
         if ((pathArray = childData.getPath().split("/")).length < 5) {
             return;
         }
-        log.info("监听到节点变更[{}],旧节点[{}],新节点[{}]", type, oldData, data);
         String interfacePath = "/" + pathArray[1] + "/" + pathArray[2];
+        log.info("监控到服务变动[{}]", interfacePath);
         InterfaceContextDetails interfaceContextDetails = INTERFACE_CACHE.get(interfacePath);
         if (interfaceContextDetails == null) {
             return;
@@ -75,15 +75,13 @@ public class ZookeeperClient implements RegistryClient, CuratorCacheListener, Co
         try {
             if (curatorFramework.checkExists().forPath(interfacePath + "/" + Role.Customer) != null) {
                 List<String> customerNode = curatorFramework.getChildren().forPath(interfacePath + "/" + Role.Customer);
-                if (customerNode != null) {
-                    interfaceContextDetails.setCustomerList(customerNode.stream().map(Customer::build).collect(Collectors.toList()));
-                }
+                customerNode = Objects.nonNull(customerNode) ? customerNode : new ArrayList<>();
+                interfaceContextDetails.setCustomerList(customerNode.stream().map(Customer::build).collect(Collectors.toList()));
             }
             if (curatorFramework.checkExists().forPath(interfacePath + "/" + Role.Provider) != null) {
                 List<String> providerNode = curatorFramework.getChildren().forPath(interfacePath + "/" + Role.Provider);
-                if (providerNode != null) {
-                    interfaceContextDetails.setProviderList(providerNode.stream().map(Provider::build).collect(Collectors.toList()));
-                }
+                providerNode = Objects.nonNull(providerNode) ? providerNode : new ArrayList<>();
+                interfaceContextDetails.setProviderList(providerNode.stream().map(Provider::build).collect(Collectors.toList()));
             }
         } catch (Exception e) {
             throw new RuntimeException(e);

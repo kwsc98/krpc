@@ -4,11 +4,10 @@ package pers.krpc.core;
 import lombok.Data;
 
 /**
- * krpc
+ * krpc接口信息
  * 2022/7/28 14:12
  *
  * @author wangsicheng
- * @since
  **/
 @Data
 public class InterfaceInfo {

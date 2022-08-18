@@ -4,15 +4,13 @@ package pers.krpc.core.registry;
 import lombok.Setter;
 import pers.krpc.core.InterfaceContextDetails;
 import pers.krpc.core.InterfaceInfo;
-import pers.krpc.core.KrpcApplicationContext;
 import pers.krpc.core.role.Role;
 
 /**
- * krpc
+ * krpc注册中心处理Service
  * 2022/7/28 15:50
  *
  * @author wangsicheng
- * @since
  **/
 public class RegistryService  {
 

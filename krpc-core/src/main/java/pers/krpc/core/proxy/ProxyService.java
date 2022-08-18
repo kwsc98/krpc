@@ -8,15 +8,13 @@ import org.springframework.cglib.proxy.MethodProxy;
 import pers.krpc.core.InterfaceContextDetails;
 import pers.krpc.core.InterfaceInfo;
 import pers.krpc.core.protocol.NettyInvokerProxy;
-
 import java.lang.reflect.Method;
 
 /**
- * krpc
+ * krpc 动态代理处理类
  * 2022/8/5 15:10
  *
  * @author wangsicheng
- * @since
  **/
 @Slf4j
 public class ProxyService {

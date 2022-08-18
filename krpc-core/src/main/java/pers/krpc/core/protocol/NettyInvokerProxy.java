@@ -11,10 +11,8 @@ import pers.krpc.core.InterfaceInfo;
 import pers.krpc.core.protocol.netty.NettyApplicationContext;
 import pers.krpc.core.role.Provider;
 import pers.krpc.core.role.ServerInfo;
-
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
-
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -23,11 +21,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 /**
- * krpc
+ * krpc请求代理方法
  * 2022/8/12 14:57
  *
  * @author wangsicheng
- * @since
  **/
 @Slf4j
 public class NettyInvokerProxy implements InvocationHandler {
@@ -45,7 +42,7 @@ public class NettyInvokerProxy implements InvocationHandler {
         InterfaceInfo interfaceInfo = interfaceContextDetails.getInterfaceInfo();
         KrpcMsg krpcMsg = KrpcMsg.build(interfaceInfo.getInterfaceClass(), method, args, interfaceInfo.getVersion());
         Promise<Object> promise = new DefaultPromise<>(new DefaultEventLoop());
-        NettyApplicationContext.getMSG_CACHE().put(krpcMsg.getUniqueIdentifier(), promise);
+        NettyApplicationContext.MSG_CACHE.put(krpcMsg.getUniqueIdentifier(), promise);
         getChannel(interfaceContextDetails.getProviderList()).writeAndFlush(krpcMsg);
         return promise.get(Long.parseLong(interfaceInfo.getTimeout()), TimeUnit.MILLISECONDS);
     }
@@ -55,6 +52,7 @@ public class NettyInvokerProxy implements InvocationHandler {
             log.info("该接口未找到生产者");
             throw new RuntimeException();
         }
+        //简单的负载均衡算法
         int index = new Random().nextInt(providerList.size());
         Provider provider = providerList.get(index);
         Channel channel = channelMap.get(provider.toChannelKey());

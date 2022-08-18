@@ -10,11 +10,10 @@ import pers.krpc.core.role.ServerInfo;
 import java.util.List;
 
 /**
- * krpc
+ * krpc服务接口详细Context
  * 2022/7/27 15:20
  *
  * @author wangsicheng
- * @since
  **/
 
 public class InterfaceContextDetails {
@@ -25,11 +24,12 @@ public class InterfaceContextDetails {
     @Getter
     protected Role role;
 
-    protected Object object;
     @Getter
     protected List<Provider> providerList;
     @Getter
     protected List<Customer> customerList;
+
+    protected Object object;
 
     public Object getObject() {
         return this.object;
@@ -49,14 +49,12 @@ public class InterfaceContextDetails {
         return this;
     }
 
-    public InterfaceContextDetails setProviderList(List<Provider> providerList) {
+    public void setProviderList(List<Provider> providerList) {
         this.providerList = providerList;
-        return this;
     }
 
-    public InterfaceContextDetails setCustomerList(List<Customer> customerList) {
+    public void setCustomerList(List<Customer> customerList) {
         this.customerList = customerList;
-        return this;
     }
 
     public InterfaceContextDetails setRole(Role role) {

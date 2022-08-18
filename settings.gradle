@@ -3,5 +3,5 @@ include 'krpc-core'
 include 'krpc-example-provider'
 include 'krpc-example-customer'
 include 'krpc-example-interface'
-include 'krpc-spring-boot'
+include 'spring-boot-starter-krpc'
 

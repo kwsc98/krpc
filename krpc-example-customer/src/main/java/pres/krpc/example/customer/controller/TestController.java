@@ -31,11 +31,10 @@ import java.util.Date;
 public class TestController {
 
     @Autowired
-    private KrpcApplicationContext krpcApplicationContext;
+    private ExampeService exampeService;
 
     @PostMapping("/test")
     public ResponseDTO test() {
-        ExampeService exampeService = krpcApplicationContext.getService(InterfaceInfo.build().setInterfaceClass(ExampeService.class).setVersion("1.0.0").setTimeout(1000));
         RequestDTO requestDTO = new RequestDTO();
         requestDTO.setData("哈哈哈哈");
         requestDTO.setDate(new Date());

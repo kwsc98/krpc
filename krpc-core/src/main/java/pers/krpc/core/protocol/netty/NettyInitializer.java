@@ -27,6 +27,7 @@ import pers.krpc.core.protocol.codec.KrpcDecoder;
 import pers.krpc.core.protocol.codec.KrpcEncoder;
 
 /**
+ * Netty协议初始化
  * @author kwsc98
  */
 public class NettyInitializer<T> extends ChannelInitializer<SocketChannel> {
@@ -42,10 +43,9 @@ public class NettyInitializer<T> extends ChannelInitializer<SocketChannel> {
         ChannelPipeline pipeline = ch.pipeline();
         // 添加行分割器
         pipeline.addLast(new DelimiterBasedFrameDecoder(8192, Delimiters.lineDelimiter()));
-        // 添加String Decoder和String Encoder,用来进行字符串的转换
         pipeline.addLast(new KrpcDecoder());
         pipeline.addLast(new KrpcEncoder());
-        // 最后添加真正的处理器
+        // 添加处理器
         pipeline.addLast(this.channelInboundHandler);
     }
 }

@@ -2,14 +2,12 @@ package pers.krpc.core.registry;
 
 
 import lombok.Data;
-import org.springframework.boot.autoconfigure.integration.IntegrationProperties;
 
 /**
- * krpc
+ * krpc注册中心参数
  * 2022/7/28 17:09
  *
  * @author wangsicheng
- * @since
  **/
 @Data
 public class RegistryClientInfo {

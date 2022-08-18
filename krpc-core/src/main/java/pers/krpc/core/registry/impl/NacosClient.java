@@ -1,8 +1,6 @@
 package pers.krpc.core.registry.impl;
 
 
-import com.alibaba.nacos.api.NacosFactory;
-import com.alibaba.nacos.api.config.ConfigService;
 import com.alibaba.nacos.api.exception.NacosException;
 import com.alibaba.nacos.api.naming.NamingFactory;
 import com.alibaba.nacos.api.naming.NamingService;
@@ -11,7 +9,6 @@ import com.alibaba.nacos.api.naming.listener.EventListener;
 import com.alibaba.nacos.api.naming.listener.NamingEvent;
 import com.alibaba.nacos.api.naming.pojo.Instance;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.zookeeper.CreateMode;
 import pers.krpc.core.InterfaceContextDetails;
 import pers.krpc.core.InterfaceInfo;
 import pers.krpc.core.KrpcApplicationContext;
@@ -21,11 +18,7 @@ import pers.krpc.core.role.Customer;
 import pers.krpc.core.role.Provider;
 import pers.krpc.core.role.Role;
 import pers.krpc.core.role.ServerInfo;
-
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Properties;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -33,7 +26,6 @@ import java.util.stream.Collectors;
  * 2022/8/17 14:12
  *
  * @author wangsicheng
- * @since
  **/
 @Slf4j
 public class NacosClient implements RegistryClient, EventListener {
@@ -60,7 +52,7 @@ public class NacosClient implements RegistryClient, EventListener {
             instance.setIp(serverInfo.getIp());
             instance.setPort(serverInfo.getPortByInt());
             instance.addMetadata(role.name(), interfaceContextDetails.getInterfaceInfo().getTimeout());
-            this.namingService.registerInstance(interfaceContextDetails.getPreNodePath(), ROOT_PATH,instance);
+            this.namingService.registerInstance(interfaceContextDetails.getPreNodePath(), ROOT_PATH, instance);
             return interfaceContextDetails;
         } catch (Exception e) {
             log.info(e.toString());
@@ -74,27 +66,28 @@ public class NacosClient implements RegistryClient, EventListener {
             NamingEvent namingEvent = (NamingEvent) event;
             String[] pathArray = namingEvent.getServiceName().split("/");
             String interfacePath = "/" + pathArray[1] + "/" + pathArray[2];
+            log.info("监控到服务变动[{}]", interfacePath);
             InterfaceContextDetails interfaceContextDetails = INTERFACE_CACHE.get(interfacePath);
             if (interfaceContextDetails == null) {
                 return;
             }
             List<Instance> instanceList = namingEvent.getInstances();
-            Map<Role,List<Instance>> roleListMap = instanceList.stream().collect(
+            Map<Role, List<Instance>> roleListMap = instanceList.stream().collect(
                     Collectors.groupingBy(e -> {
-                        if(e.containsMetadata(Role.Customer.name())){
+                        if (e.containsMetadata(Role.Customer.name())) {
                             return Role.Customer;
-                        }else {
+                        } else {
                             return Role.Provider;
                         }
                     }));
             List<Instance> customerList = roleListMap.get(Role.Customer);
-            if(Objects.nonNull(customerList)){
-                interfaceContextDetails.setCustomerList(roleListMap.get(Role.Customer).stream().map(Customer::build).collect(Collectors.toList()));
-            }
+            customerList = Objects.nonNull(customerList) ? customerList : new ArrayList<>();
+            interfaceContextDetails.setCustomerList(customerList.stream().map(Customer::build).collect(Collectors.toList()));
+
             List<Instance> providerList = roleListMap.get(Role.Provider);
-            if(Objects.nonNull(providerList)){
-                interfaceContextDetails.setProviderList(roleListMap.get(Role.Provider).stream().map(Provider::build).collect(Collectors.toList()));
-            }
+            providerList = Objects.nonNull(providerList) ? providerList : new ArrayList<>();
+            interfaceContextDetails.setProviderList(providerList.stream().map(Provider::build).collect(Collectors.toList()));
+
         }
     }
 }

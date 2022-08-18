@@ -2,6 +2,7 @@ package pers.krpc.core.protocol;
 
 
 import lombok.Getter;
+import lombok.ToString;
 
 import java.lang.reflect.Method;
 import java.util.UUID;
@@ -14,6 +15,7 @@ import java.util.UUID;
  * @since
  **/
 @Getter
+@ToString
 public class KrpcMsg {
 
     private String uniqueIdentifier;
