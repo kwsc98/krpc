@@ -1,5 +1,5 @@
 dependencies {
-    implementation project(':krpc-core')
+    implementation project(':spring-boot-starter-krpc')
     implementation project(':krpc-example-interface')
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
 }

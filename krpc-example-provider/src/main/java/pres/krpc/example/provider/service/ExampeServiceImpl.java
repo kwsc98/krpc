@@ -1,11 +1,10 @@
 package pres.krpc.example.provider.service;
 
 
-import org.springframework.stereotype.Service;
-import pers.krpc.core.role.ServerInfo;
 import pres.krpc.exampe.ExampeService;
 import pres.krpc.exampe.dto.RequestDTO;
 import pres.krpc.exampe.dto.ResponseDTO;
+import pres.krpc.spring.annotation.KrpcService;
 
 /**
  * krpc
@@ -14,7 +13,7 @@ import pres.krpc.exampe.dto.ResponseDTO;
  * @author wangsicheng
  * @since
  **/
-@Service
+@KrpcService
 public class ExampeServiceImpl implements ExampeService {
 
     @Override

@@ -5,15 +5,21 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanClassLoaderAware;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
+import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.lang.NonNull;
+import org.springframework.lang.NonNullApi;
+import org.springframework.lang.Nullable;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.ReflectionUtils;
-import pres.krpc.spring.annotation.KrpcProvider;
+import pers.krpc.core.InterfaceInfo;
+import pers.krpc.core.KrpcApplicationContext;
 import pres.krpc.spring.annotation.KrpcService;
+import pres.krpc.spring.annotation.KrpcResource;
 
 import javax.annotation.Resource;
 import java.lang.reflect.Field;
@@ -26,58 +32,36 @@ import java.util.Objects;
  * @author wangsicheng
  * @since
  **/
-public class KrpcPostProcessor implements ApplicationContextAware, BeanClassLoaderAware, BeanFactoryPostProcessor {
+public class KrpcPostProcessor implements ApplicationContextAware, BeanPostProcessor {
 
-    private ClassLoader classLoader;
+
+    private final KrpcApplicationContext krpcApplicationContext;
+
     private ApplicationContext applicationContext;
 
-    @Resource
-
-    @Override
-    public void setBeanClassLoader(ClassLoader classLoader) {
-        this.classLoader = classLoader;
+    KrpcPostProcessor(KrpcApplicationContext krpcApplicationContext) {
+        this.krpcApplicationContext = krpcApplicationContext;
     }
 
-
     @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+    public void setApplicationContext(@Nullable ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
     }
 
     @Override
-    public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
-        for (String beanDefinitionName : beanFactory.getBeanDefinitionNames()) {
-            BeanDefinition beanDefinition = beanFactory.getBeanDefinition(beanDefinitionName);
-            String beanClassName = beanDefinition.getBeanClassName();
-            if (beanClassName != null) {
-                Class<?> clazz = ClassUtils.resolveClassName(beanClassName, this.classLoader);
-                ReflectionUtils.doWithFields(clazz, this::krpcDoRegistered);
-            }
+    public Object postProcessBeforeInitialization(@Nullable Object bean, @Nullable String beanName) throws BeansException {
+        assert beanName != null;
+        assert bean != null;
+        KrpcResource krpcResource = applicationContext.findAnnotationOnBean(beanName, KrpcResource.class);
+        if (Objects.nonNull(krpcResource)) {
+            return krpcApplicationContext.getService(InterfaceInfo.build().setInterfaceClass(bean.getClass()).setVersion(krpcResource.version()).setTimeout(krpcResource.timeout()));
         }
-    }
 
-
-    private void krpcDoRegistered(Field field) {
-        doKrpcService(field);
-        doKrpcProvider(field);
-    }
-
-    private void doKrpcService(Field field) {
-        KrpcService krpcServiceAnnotation = AnnotationUtils.getAnnotation(field, KrpcService.class);
-        if (Objects.nonNull(krpcServiceAnnotation)) {
-            BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition(CustomerBean.class);
-            builder.setInitMethodName("init");
-            builder.addPropertyValue("interfaceClass", field.getType());
-            builder.addPropertyValue("version", krpcServiceAnnotation.version());
-            builder.addPropertyValue("timeout", krpcServiceAnnotation.timeout());
-            BeanDefinition beanDefinition = builder.getBeanDefinition();
-
+        KrpcService krpcService = AnnotationUtils.findAnnotation(bean.getClass(), KrpcService.class);
+        if (Objects.nonNull(krpcService)) {
+            krpcApplicationContext.setService(InterfaceInfo.build().setInterfaceClass(bean.getClass()).setVersion(krpcService.version()).setTimeout(krpcService.timeout()), bean);
         }
+        return bean;
     }
-
-    private void doKrpcProvider(Field field) {
-        KrpcProvider krpcProviderAnnotation = AnnotationUtils.getAnnotation(field, KrpcProvider.class);
-    }
-
 
 }

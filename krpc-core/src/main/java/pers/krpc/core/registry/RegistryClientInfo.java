@@ -16,16 +16,17 @@ public class RegistryClientInfo {
 
     private Client client;
 
-    public static RegistryClientInfo build(){
-        return new RegistryClientInfo();
+    public static RegistryClientInfo build(String serverAddr){
+        String[] strings = serverAddr.split("://");
+        return new RegistryClientInfo().setClient(strings[0]).setServerAddr(strings[1]);
     }
 
-    public RegistryClientInfo setServerAddr(String serverAddr) {
+    private RegistryClientInfo setServerAddr(String serverAddr) {
         this.serverAddr = serverAddr;
         return this;
     }
 
-    public RegistryClientInfo setClient(String client) {
+    private RegistryClientInfo setClient(String client) {
         this.client = Client.getClient(client);
         return this;
     }
