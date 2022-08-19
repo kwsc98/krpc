@@ -4,6 +4,7 @@ package pres.krpc.exampe.dto;
 import lombok.Data;
 import lombok.Getter;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -14,9 +15,9 @@ import java.util.Date;
  * @since
  **/
 @Data
-public class RequestDTO {
+public class RequestDTO implements Serializable {
 
-    private String data;
+    private int num;
 
     private Date date;
 

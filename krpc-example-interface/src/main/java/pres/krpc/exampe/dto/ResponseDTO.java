@@ -14,8 +14,6 @@ import java.util.Date;
 @Data
 public class ResponseDTO {
 
-    private String data;
-
     private Date date;
 
 }

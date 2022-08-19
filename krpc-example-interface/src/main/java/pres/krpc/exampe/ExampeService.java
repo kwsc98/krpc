@@ -10,7 +10,6 @@ import pres.krpc.exampe.dto.ResponseDTO;
  * 2022/7/26 15:06
  *
  * @author wangsicheng
- * @since
  **/
 public interface ExampeService {
      ResponseDTO doRun(RequestDTO requestDTO);
