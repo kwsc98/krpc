@@ -39,12 +39,15 @@ public class NettyInvokerProxy implements InvocationHandler {
 
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+        long sysTime = System.currentTimeMillis();
         InterfaceInfo interfaceInfo = interfaceContextDetails.getInterfaceInfo();
         KrpcMsg krpcMsg = KrpcMsg.build(interfaceInfo.getInterfaceClass(), method, args, interfaceInfo.getVersion());
         Promise<Object> promise = new DefaultPromise<>(new DefaultEventLoop());
         NettyApplicationContext.MSG_CACHE.put(krpcMsg.getUniqueIdentifier(), promise);
         getChannel(interfaceContextDetails.getProviderList()).writeAndFlush(krpcMsg);
-        return promise.get(Long.parseLong(interfaceInfo.getTimeout()), TimeUnit.MILLISECONDS);
+        Object object = promise.get(Long.parseLong(interfaceInfo.getTimeout()), TimeUnit.MILLISECONDS);
+        log.debug("请求 [{}] 响应时间 [{}]",krpcMsg.getUniqueIdentifier(),System.currentTimeMillis()-sysTime);
+        return object;
     }
 
     private Channel getChannel(List<Provider> providerList) {

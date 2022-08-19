@@ -2,7 +2,6 @@ package pres.krpc.spring;
 
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -15,8 +14,6 @@ import pers.krpc.core.KrpcApplicationContext;
 import pers.krpc.core.KrpcBuilderFactory;
 import pers.krpc.core.registry.RegistryBuilderFactory;
 import pers.krpc.core.registry.RegistryClientInfo;
-
-import java.util.Objects;
 
 /**
  * krpc
@@ -49,5 +46,6 @@ public class AutoConfig {
     public KrpcPostProcessor dtpPostProcessor(@Qualifier("krpcApplicationContext") KrpcApplicationContext krpcApplicationContext) {
         return new KrpcPostProcessor(krpcApplicationContext);
     }
+
 
 }

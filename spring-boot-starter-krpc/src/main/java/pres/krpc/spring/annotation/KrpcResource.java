@@ -8,16 +8,18 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import static jdk.nashorn.internal.runtime.Version.version;
+
 /**
  * @author kwsc98
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-@Resource
 public @interface KrpcResource {
 
     String version() default "1.0.0";
 
     long timeout() default 1000;
+
 
 }
