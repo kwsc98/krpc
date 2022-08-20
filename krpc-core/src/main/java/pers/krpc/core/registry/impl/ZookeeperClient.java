@@ -94,10 +94,19 @@ public class ZookeeperClient implements RegistryClient, CuratorCacheListener, Co
         try {
             InterfaceContextDetails interfaceContextDetails = new InterfaceContextDetails().setInterfaceInfo(interfaceInfo).setRole(role);
             INTERFACE_CACHE.put(interfaceContextDetails.getPreNodePath(), interfaceContextDetails);
+            deleteNode(interfaceContextDetails.getNodePath());
             curatorFramework.create().creatingParentsIfNeeded().withMode(CreateMode.EPHEMERAL).forPath(interfaceContextDetails.getNodePath());
             return interfaceContextDetails;
         } catch (Exception e) {
             throw new RuntimeException();
+        }
+    }
+
+    public void deleteNode(String nodePath) {
+        try {
+            curatorFramework.delete().forPath(nodePath);
+        } catch (Exception e) {
+            //
         }
     }
 

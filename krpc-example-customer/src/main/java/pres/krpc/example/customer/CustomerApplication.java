@@ -9,7 +9,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * 2022/7/26 14:16
  *
  * @author wangsicheng
- * @since
  **/
 @SpringBootApplication
 public class CustomerApplication {
