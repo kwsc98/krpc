@@ -16,7 +16,7 @@ import java.util.GregorianCalendar;
  *
  * @author wangsicheng
  **/
-@KrpcService
+@KrpcService(version = "1.0.1")
 public class ExampeServiceImpl implements ExampeService {
 
     @Override

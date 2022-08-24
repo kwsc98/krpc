@@ -24,7 +24,7 @@ import java.util.Date;
 @Slf4j
 public class TestController {
 
-    @KrpcResource
+    @KrpcResource(version = "1.0.1",timeout = 1000)
     private ExampeService exampeService;
 
 

@@ -1,3 +1,4 @@
 dependencies {
     implementation project(':krpc-core')
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 }
