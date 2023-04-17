@@ -43,7 +43,7 @@ public class AutoConfig {
     @Bean
     @DependsOn({"krpcApplicationContext"})
     @ConditionalOnMissingBean
-    public KrpcPostProcessor dtpPostProcessor(@Qualifier("krpcApplicationContext") KrpcApplicationContext krpcApplicationContext) {
+    public KrpcPostProcessor krpcPostProcessor(@Qualifier("krpcApplicationContext") KrpcApplicationContext krpcApplicationContext) {
         return new KrpcPostProcessor(krpcApplicationContext);
     }
 
