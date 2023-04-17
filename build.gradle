@@ -24,6 +24,7 @@ subprojects {
     version = '0.0.1-SNAPSHOT'
     sourceCompatibility = '8'
     apply plugin: 'java'
+    apply plugin: 'maven-publish'
     apply plugin: 'org.springframework.boot'
     apply plugin: 'io.spring.dependency-management'
 
@@ -39,6 +40,15 @@ subprojects {
         implementation 'org.apache.commons:commons-lang3:3.12.0'
         implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.3'
     }
+
+    publishing {
+        publications {
+            mavenJava(MavenPublication) {
+                from components.java
+            }
+        }
+    }
+
 }
 
 

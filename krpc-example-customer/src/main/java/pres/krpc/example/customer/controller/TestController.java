@@ -31,7 +31,7 @@ public class TestController {
     /**
      * curl --location --request POST 'http://127.0.0.1:8081/test' --header 'Connection: keep-alive' --header 'Content-Type: application/json' --data-raw '{ "num" : 4 }'
      **/
-    @RequestMapping(value = "/test", method = RequestMethod.POST)
+    @RequestMapping(value = "/krpc/test/getNowTime", method = RequestMethod.POST)
     public String test(@RequestBody RequestDTO requestDTO) {
         requestDTO.setDate(new Date());
         Date date = exampeService.doRun(requestDTO).getDate();

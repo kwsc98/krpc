@@ -3,6 +3,8 @@ dependencies {
     implementation 'io.netty:netty-all:4.1.79.Final'
     implementation 'com.github.ben-manes.caffeine:caffeine:2.9.3'
     implementation 'com.alibaba.nacos:nacos-client:2.1.1'
+    implementation 'cn.hutool:hutool-all:5.8.6'
+    implementation 'org.bouncycastle:bcprov-jdk15to18:1.71'
 }
 
 tasks.named("jar") {
