@@ -39,4 +39,12 @@ public class TestController {
         return myFmt.format(date);
     }
 
+    @RequestMapping(value = "/kapi/test/getNowTimeV3", method = RequestMethod.POST)
+    public String test2(@RequestBody RequestDTO requestDTO) {
+        requestDTO.setDate(new Date());
+        Date date = exampeService.doRun(requestDTO).getDate();
+        SimpleDateFormat myFmt = new SimpleDateFormat("yyyy年MM月dd日 HH时mm分ss秒V3");
+        return myFmt.format(date);
+    }
+
 }
