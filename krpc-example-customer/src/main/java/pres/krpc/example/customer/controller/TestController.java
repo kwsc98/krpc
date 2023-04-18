@@ -43,7 +43,7 @@ public class TestController {
     public String test2(@RequestBody RequestDTO requestDTO) {
         requestDTO.setDate(new Date());
         Date date = exampeService.doRun(requestDTO).getDate();
-        SimpleDateFormat myFmt = new SimpleDateFormat("yyyy年MM月dd日 HH时mm分ss秒V3");
+        SimpleDateFormat myFmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return myFmt.format(date);
     }
 
